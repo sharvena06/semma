@@ -1,287 +1,257 @@
-3:
-**CREATE DIRECTORY AND FILE**
+exp google app engine:
+sudo mv Hello.class /var/lib/tomcat10/webapps/HelloProject/WEB-INF/classes
+sudo systemctl restart tomcat10
+nano Hello.java
+sudo mkdir -p /var/lib/tomcat10/webapps/HelloProject/WEB-INF/classes
+javac -cp /usr/share/tomcat10/lib/servlet-api.jar Hello.java
+sudo mv Hello.class /var/lib/tomcat10/webapps/HelloProject/WEB-INF/classes
+sudo systemctl restart tomcat10
+code:
+import java.io.IOException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-**Step 1: Create Directory**
-
-```bash
-cd ~
-mkdir ansible-practice1
-cd ansible-practice1
-```
-
-**Step 2: Create Playbook File**
-
-```bash
-nano playbook01.yml
-```
-
-**Step 3: Enter YAML Syntax**
-
-```yaml
----
-- hosts: localhost
-  tasks:
-    - name: Print message
-      debug:
-        msg: Hello Ansible World
-```
-
-Save the file: `Ctrl + O` → Enter → `Ctrl + X`
-
-**Step 4: Run Playbook**
-
-```bash
-ansible-playbook -i localhost, -c local playbook01.yml
-```
-
-**OUTPUT:**
-
-```text
-PLAY [localhost]
-
-TASK [Print message]
-ok: [localhost] => {
-    "msg": "Hello Ansible World"
-}
-
-PLAY RECAP
-localhost : ok=1 changed=0 unreachable=0 failed=0
-```
-
-**RESULT:** Ansible playbook successfully executed and printed “Hello Ansible World”.
-
-4a :
-# Step 1: Create folder
-mkdir git-lab
-cd git-lab
-
-# Step 2: Initialize Git
-git init
-
-# Step 3: Configure username and email
-git config --global user.name "Your Name"
-git config --global user.email "your-email@gmail.com"
-
-# Step 4: Create file
-echo Hello GitHub > file.txt
-
-# Step 5: Add and commit
-git add .
-git commit -m "Initial commit"
-
-# Step 6: Connect GitHub repository
-git branch -M main
-git remote add origin https://github.com/USERNAME/git-lab.git
-
-# Step 7: Push to GitHub
-git push -u origin main
-
-# Step 8: Fetch changes
-git fetch origin
-
-# Step 9: Merge changes
-git merge origin/main
-
-# Step 10: Pull changes
-git pull origin main
-
-# Step 11: Update file
-echo Updated GitHub > file.txt
-git add .
-git commit -m "Updated file"
-
-# Step 12: Push changes
-git push origin main
-
-5b:
-# STEP 1: Configure Git
-git config --global user.name "Sharvena"
-git config --global user.email "your-email@gmail.com"
-
-# STEP 2: Check Git Configuration
-git config --global --list
-
-# STEP 3: Create a Repository
-mkdir git-practice
-cd git-practice
-git init
-
-# STEP 4: Create a File
-echo "Hello Git" > file.txt
-
-# STEP 5: Check Repository Status
-git status
-
-# STEP 6: Add Files
-git add .
-
-# STEP 7: Commit Files
-git commit -m "Initial commit"
-
-# STEP 8: Check Git Status
-git status
-
-# STEP 9: Create GitHub Repository
-# Create an empty repository on GitHub website
-
-# STEP 10: Connect GitHub Repository
-git remote add origin https://github.com/USERNAME/REPOSITORY.git
-
-# STEP 11: Check Remote Connection
-git remote -v
-
-# STEP 12: Rename Branch to Main
-git branch -M main
-
-# STEP 13: Push Files to GitHub
-git push -u origin main
-
-# STEP 14: Check Git Status
-git status
-
-exp 1b
-mkdir jenkins_lab
-cd jenkins_lab
-nano jen.txt
-cat jen.txt
-sudo chmod 755 /home/pavi
-sudo chmod 755 /home/pavi/jenkins_lab
-sudo chmod 644 /home/pavi/jenkins_lab/jen.txt
-Click New Item.
-http://localhost:8080
- enter name: Periodic-Build.
-Select Freestyle Project.
-Click OK.
-to congihure:
-* * * * *
-Build Steps → Add build step → Execute shell.
-echo "Periodic Build Started"
-date
-echo "File Content:"
-cat /home/pavi/jenkins_lab/jen.txt
-to modify in terminal ubu:
-nano /home/pavi/jenkins_lab/jen.txt
-to find real path:realpath ~/jenkins_lab/jen.txt
-to install jenkins:
-sudo apt update
-sudo apt upgrade -y
-java -version
-sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt update
-sudo apt install jenkins -y
-sudo systemctl start jenkins
-sudo systemctl enable jenkins
-sudo systemctl status jenkins
-
-Exp 2:
-b:
-# EXPERIMENT 8 - INSTALL ANSIBLE AND CONFIGURE ROLES
-
-# STEP 1: Install Ansible
-sudo apt update
-sudo apt install -y software-properties-common
-sudo add-apt-repository --yes --update ppa:ansible/ansible
-sudo apt install -y ansible
-ansible --version
-
-# STEP 2: Create directory and roles
-mkdir -p ~/ansible_exp8
-cd ~/ansible_exp8
-
-ansible-galaxy init prerequisites
-ansible-galaxy init postgresql
-ansible-galaxy init apache
-
-# STEP 3: Configure prerequisites/tasks/main.yml
-cat > prerequisites/tasks/main.yml <<'EOF'
----
-- name: Install Git
-  apt:
-    name: git
-    state: present
-    update_cache: yes
-EOF
-
-# STEP 4: Configure postgresql/tasks/main.yml
-cat > postgresql/tasks/main.yml <<'EOF'
----
-- name: Install PostgreSQL
-  apt:
-    name: postgresql
-    state: present
-    update_cache: yes
-
-- name: Start PostgreSQL service
-  service:
-    name: postgresql
-    state: started
-    enabled: yes
-EOF
-
-# STEP 5: Configure apache/tasks/main.yml
-cat > apache/tasks/main.yml <<'EOF'
----
-- name: Install Apache web server
-  apt:
-    name: apache2
-    state: present
-    update_cache: yes
-
-- name: Start Apache service
-  service:
-    name: apache2
-    state: started
-    enabled: yes
-EOF
-
-# STEP 6: Create site.yml
-cat > site.yml <<'EOF'
----
-- name: Configure web application infrastructure
-  hosts: localhost
-  connection: local
-  become: yes
-  roles:
-    - prerequisites
-    - postgresql
-    - apache
-EOF
-
-# STEP 7: Syntax check
-ansible-playbook site.yml --syntax-check
-
-# STEP 8: Execute playbook
-sudo ansible-playbook -i localhost, -c local site.yml
-
-# STEP 9: Verify installation
-git --version
-systemctl is-active postgresql
-systemctl is-active apache2
-
-2a:
-. IntelliJ IDEA open pannom.
-
-2. New Project click pannom.
-
-3. Indha settings choose pannom
-4. git --version
-5. git config --global user.name "Your Name"
-git config --global user.email "your-email@example.com"
-git init
-git add .
-git commit -m "First Commit"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/maven-devops-lab.git
-git push -u origin main
-First pipeline run pannom
-package org.example;
-
-public class Main {
-    public static void main(String[] args) {
-        System.out.println("Hello, Azure DevOps!");
+@WebServlet("/helloworld")
+public class Hello extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html");
+        response.getWriter().println("Hello, world");
     }
 }
+
+cloudsim program:
+public class FCFS {
+    public static void main(String[] args) {
+
+        int bt[] = {5, 3, 2};
+        int wt[] = new int[3];
+        int tat[] = new int[3];
+
+        wt[0] = 0;
+
+        for (int i = 1; i < 3; i++)
+            wt[i] = wt[i-1] + bt[i-1];
+
+        for (int i = 0; i < 3; i++)
+            tat[i] = wt[i] + bt[i];
+
+        System.out.println("Process\tBT\tWT\tTAT");
+
+        for (int i = 0; i < 3; i++)
+            System.out.println("P" + (i+1) + "\t" + bt[i] + "\t" + wt[i] + "\t" + tat[i]);
+    }
+}
+vm to vm 
+sudo groupadd vboxsf
+sudo usermod -aG vboxsf $USER
+sudo apt update
+sudo apt install -y virtualbox-guest-utils
+sudo reboot
+cd /media
+ls
+cd /media/sf-vm_share
+echo "Hello from VM1" > test.txt
+cd /media/sf-vm_share
+cat test.txt
+
+hadoop:
+# Step 1: Download Hadoop
+wget https://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop-2.7.3.tar.gz
+
+# Step 2: Extract Hadoop
+tar -xvzf hadoop-2.7.3.tar.gz
+
+# Step 3: Set Environment Variables
+nano ~/.bashrc
+
+# Add these lines:
+export JAVA_HOME=/usr/lib/jvm/temurin-8-jdk-amd64
+export HADOOP_HOME=$HOME/hadoop-2.7.3
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+
+# Apply changes
+source ~/.bashrc
+
+# Step 4: Check Versions
+java -version
+hadoop version
+
+# Step 5: Open Configuration Folder
+cd ~/hadoop-2.7.3/etc/hadoop
+
+# Step 6: Configure Java
+nano hadoop-env.sh
+# Add: export JAVA_HOME=/usr/lib/jvm/temurin-8-jdk-amd64
+
+# Step 7: Configure Core Site
+nano core-site.xml
+# Set fs.defaultFS = hdfs://localhost:9000
+
+# Step 8: Configure HDFS Site
+nano hdfs-site.xml
+# Set dfs.replication = 1
+
+# Step 9: Configure MapReduce
+cp mapred-site.xml.template mapred-site.xml
+nano mapred-site.xml
+# Set mapreduce.framework.name = yarn
+
+# Step 10: Configure YARN
+nano yarn-site.xml
+# Set yarn.nodemanager.aux-services = mapreduce_shuffle
+
+# Step 11: Install SSH
+sudo apt install openssh-server openssh-client -y
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+# Step 12: Format NameNode (only first time)
+hdfs namenode -format
+
+# Step 13: Start Hadoop
+start-dfs.sh
+start-yarn.sh
+
+# Step 14: Check Services
+jps
+
+# Step 15: Test HDFS
+hdfs dfs -mkdir -p /input
+hdfs dfs -ls /
+exp 8:container in docker
+Ex no 08
+docker --version
+
+cat /etc/os-release
+
+sudo apt update
+
+sudo apt install docker.io -y
+
+sudo systemctl status docker
+
+sudo docker run hello-world
+
+sudo docker run -it ubuntu top
+
+sudo docker ps -a
+
+sudo docker run -it --name ubuntu1 ubuntu bash
+
+ps -ef
+
+exit
+
+sudo docker run -d -p 8080:80 --name nginx nginx
+
+sudo docker ps
+
+run http://localhost:8080 in browser
+"welcome to nginx" page appear
+
+sudo docker ps
+
+sudo docker stop nginx mongo
+
+expected output
+nginx
+mongo
+
+sudo docker rm nginx mongo
+
+expected output
+nginx
+mongo
+exp 9:
+Ex no :09
+docker --version
+docker login
+Login with you mail id
+docker pull hello-world
+docker run hello-world
+docker run -it ubuntu bash
+ls
+pwd
+exit
+mkdir mydocker
+cd mydocker
+nano Dockerfile
+docker build -t yourusername/my-private-repo .
+docker run yourusername/my-private-repo
+docker push yourusername/my-private-repo
+sudo docker login
+sudo docker tag sharvena/my-private-repo:latest sharvena/my-repo1:latest
+sudo docker push sharvena/my-repo1:latest
+sudo docker images
+FROM ubuntu:latest
+CMD ["echo", "Hello from my Docker image!"]
+
+exp 4:
+# STEP 1: Create Directory
+mkdir experiment4
+cd experiment4
+
+# STEP 2: Create Python File
+nano main.py
+
+# STEP 3: Python Program
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Welcome to Experiment 4"
+
+@app.route("/second")
+def second():
+    return "Second Web Application"
+
+@app.route("/status")
+def status():
+    return "Application Running Successfully"
+
+# STEP 4: Install Flask
+pip install flask
+
+# STEP 5: Check Program
+python -m py_compile main.py
+
+# STEP 6: Configure WSGI File
+# Web → WSGI Configuration File
+
+import sys
+path = '/home/yourusername/experiment4'
+sys.path.insert(0, path)
+from main import app as application
+
+# STEP 7: Reload Application
+# Web → Reload
+
+# STEP 8: Check Output
+# Website URL/
+# Website URL/second
+# Website URL/status
+
+# STEP 9: Monitor Application
+# Web → Log files
+# Access log
+# Error log
+
+# STEP 10: Stop Application
+# Web → Disable website
+
+
+
+
+
+
+
+
 
 
 
